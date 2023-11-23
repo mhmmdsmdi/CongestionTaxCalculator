@@ -5,22 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace CongestionTaxCalculator.Controllers;
 
 [ApiController]
-public class HomeController : ControllerBase
+public class HomeController(ILogger<HomeController> logger,
+        ICongestionTaxCalculatorService congestionTaxCalculatorService, IVehicle vehicle)
+    : ControllerBase
 {
-    private readonly ILogger<HomeController> _logger;
-    private readonly ICongestionTaxCalculatorService _congestionTaxCalculatorService;
-    private readonly IVehicle _vehicle;
-
-    public HomeController(ILogger<HomeController> logger, ICongestionTaxCalculatorService congestionTaxCalculatorService, IVehicle vehicle)
+    [Route("")]
+    [HttpPost]
+    public int GetTax(List<DateTime> dates)
     {
-        _logger = logger;
-        _congestionTaxCalculatorService = congestionTaxCalculatorService;
-        _vehicle = vehicle;
-    }
-
-    [HttpPost()]
-    public int GetTax([FromQuery] DateTime[] dates)
-    {
-        return _congestionTaxCalculatorService.GetTax(_vehicle, dates);
+        return congestionTaxCalculatorService.GetTax(vehicle, dates.ToArray());
     }
 }

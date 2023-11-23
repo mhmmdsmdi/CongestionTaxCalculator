@@ -11,14 +11,19 @@ builder.Services.AddControllers();
 
 builder.Services.AddSingleton<IVehicle, Motorbike>();
 builder.Services.AddSingleton<IVehicle, Car>();
-builder.Services.AddSingleton<ICongestionTaxCalculatorService, CongestionTaxCalculatorService>();
+builder.Services.AddScoped<ICongestionTaxCalculatorService, CongestionTaxCalculatorService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("Main"));
 });
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // Configure the HTTP request pipeline.
 
